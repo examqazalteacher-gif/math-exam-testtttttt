@@ -133,7 +133,7 @@ const questions = [
 ];
 
 const TEACHER_CODE = "1234567890";
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw6Sa8fpnqU0XCVgaNFhYaO_1aWsLzcJ1I3OV-4Gimd-VdJpDQ1BkX9yTbBXWpK4w/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyratxIhkOpyevUElsyN0QUN1_g0mQ6KtC_Qz6BUgnKH6H5QlnCUFhlM4TvDkJzSBOH/exec";
 
 let examSubmitted = false;
 let userInfo = null;
@@ -143,15 +143,21 @@ async function saveScoreToSheet(name, code, score, total) {
         const response = await fetch(SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: name, code: code, score: score, total: total })
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: name,
+                code: code,
+                score: score,
+                total: total
+            })
         });
         console.log("نمره با موفقیت ذخیره شد");
     } catch(e) {
         console.log("خطا در ذخیره نمره:", e);
     }
 }
-
 function getScores() {
     const scores = localStorage.getItem('mathExamScores');
     return scores ? JSON.parse(scores) : [];
