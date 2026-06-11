@@ -31,6 +31,8 @@
         .back-btn { background: #6c757d; margin-top: 10px; }
         .student-list { max-height: 400px; overflow-y: auto; margin: 15px 0; }
         .emoji-big { font-size: 3rem; }
+        .teacher-login-box { display: block; }
+        .teacher-data-box { display: none; }
     </style>
 </head>
 <body>
@@ -76,12 +78,19 @@
     <div id="teacherPanel" style="display: none;">
         <div class="emoji-big">👨‍🏫📊</div>
         <h1>پنل معلم</h1>
-        <div class="input-group"><label>کد ملی معلم:</label><input type="password" id="teacherCode" maxlength="10"><div class="error" id="teacherError">کد اشتباه است</div><button class="btn-teacher" id="loginTeacherBtn">ورود</button></div>
-        <div id="teacherDataSection" style="display: none;">
+        <div id="teacherLoginDiv" class="teacher-login-box">
+            <div class="input-group">
+                <label>کد ملی معلم:</label>
+                <input type="password" id="teacherCode" maxlength="10" inputmode="numeric">
+                <div class="error" id="teacherError">کد اشتباه است</div>
+                <button class="btn-teacher" id="loginTeacherBtn">ورود به پنل</button>
+            </div>
+        </div>
+        <div id="teacherDataDiv" class="teacher-data-box">
             <div class="student-list" id="studentListContainer"></div>
             <button class="btn-excel" id="exportExcelBtn">📎 خروجی Excel</button>
             <button class="btn-submit" id="clearScoresBtn" style="background:#d32f2f;">🗑️ پاک کردن همه نمرات</button>
-            <button class="back-btn btn-start" id="logoutTeacherBtn">خروج</button>
+            <button class="back-btn btn-start" id="logoutTeacherBtn">خروج از پنل</button>
         </div>
         <button class="back-btn btn-start" id="backHomeFromTeacher">🔙 بازگشت</button>
     </div>
@@ -171,16 +180,19 @@ function saveUserInfo() {
 function showTeacherPanel() {
     document.getElementById('homeSection').style.display = 'none';
     document.getElementById('teacherPanel').style.display = 'block';
-    document.getElementById('teacherLoginSection').style.display = 'block';
-    document.getElementById('teacherDataSection').style.display = 'none';
+    document.getElementById('teacherLoginDiv').style.display = 'block';
+    document.getElementById('teacherDataDiv').style.display = 'none';
 }
 
 function loginTeacher() {
-    if(document.getElementById('teacherCode').value === TEACHER_CODE) {
-        document.getElementById('teacherLoginSection').style.display = 'none';
-        document.getElementById('teacherDataSection').style.display = 'block';
+    const enteredCode = document.getElementById('teacherCode').value.trim();
+    if(enteredCode === TEACHER_CODE) {
+        document.getElementById('teacherLoginDiv').style.display = 'none';
+        document.getElementById('teacherDataDiv').style.display = 'block';
         displayScores();
-    } else { document.getElementById('teacherError').style.display = 'block'; }
+    } else {
+        document.getElementById('teacherError').style.display = 'block';
+    }
 }
 
 function displayScores() {
@@ -228,15 +240,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('startExamBtn').onclick = startExam;
     document.getElementById('submitBtn').onclick = showResult;
     document.getElementById('loginTeacherBtn').onclick = loginTeacher;
-    document.getElementById('logoutTeacherBtn').onclick = () => { document.getElementById('teacherLoginSection').style.display = 'block'; document.getElementById('teacherDataSection').style.display = 'none'; };
+    document.getElementById('logoutTeacherBtn').onclick = () => { document.getElementById('teacherLoginDiv').style.display = 'block'; document.getElementById('teacherDataDiv').style.display = 'none'; document.getElementById('teacherCode').value = ''; };
     document.getElementById('exportExcelBtn').onclick = exportExcel;
     document.getElementById('clearScoresBtn').onclick = clearScores;
     document.getElementById('backHomeFromInfo').onclick = showHome;
     document.getElementById('backHomeFromWelcome').onclick = showHome;
     document.getElementById('backHomeFromExam').onclick = showHome;
     document.getElementById('backHomeFromTeacher').onclick = showHome;
+    
     document.getElementById('nationalCode').oninput = function(e) { this.value = this.value.replace(/[^0-9]/g, ''); };
     document.getElementById('teacherCode').oninput = function(e) { this.value = this.value.replace(/[^0-9]/g, ''); };
+    
     showHome();
 });
 </script>
