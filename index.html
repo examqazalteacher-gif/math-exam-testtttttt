@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>آزمون ریاضی ششم</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Vazir', sans-serif; }
+        body { background: linear-gradient(135deg, #4facfe, #00f2fe); min-height: 100vh; padding: 40px 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: rgba(255,255,255,0.95); border-radius: 48px; padding: 30px 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center; }
+        h1 { text-align: center; color: #ff8c00; font-size: 2.2rem; margin-bottom: 10px; text-shadow: 2px 2px 0 #ffe0b3; }
+        .sub { text-align: center; color: #2c3e66; margin-bottom: 30px; border-bottom: 2px dashed #ffb347; display: inline-block; width: auto; margin-left: auto; margin-right: auto; padding-bottom: 8px; }
+        .question-card { background: #fff7ed; border-radius: 32px; padding: 20px; margin-bottom: 30px; box-shadow: 0 8px 18px rgba(0,0,0,0.1); border: 1px solid #ffe0b3; text-align: right; }
+        .question-text { font-size: 1.5rem; font-weight: bold; color: #2d3748; margin-bottom: 20px; background: #ffefcf; padding: 12px 18px; border-radius: 28px; }
+        .options { display: flex; flex-direction: column; gap: 12px; margin-right: 15px; }
+        .option { display: flex; align-items: center; gap: 12px; background: white; padding: 10px 18px; border-radius: 60px; border: 1px solid #ffd9a5; cursor: pointer; transition: 0.2s; }
+        .option:hover { background: #fff0e0; transform: scale(1.01); }
+        input[type="radio"] { width: 20px; height: 20px; accent-color: #ff8c42; cursor: pointer; }
+        label { font-size: 1.1rem; font-weight: 500; color: #3b2c1e; width: 100%; cursor: pointer; }
+        .btn-submit, .btn-start, .btn-info, .btn-teacher { display: block; width: 100%; background: linear-gradient(95deg, #ff9a3c, #ff6a00); border: none; padding: 18px; border-radius: 50px; font-size: 1.6rem; font-weight: bold; color: white; cursor: pointer; margin: 20px 0 25px; box-shadow: 0 6px 0 #b24200; transition: 0.1s; }
+        .btn-teacher { background: linear-gradient(95deg, #6a11cb, #2575fc); box-shadow: 0 6px 0 #3a0a7a; }
+        .btn-submit:active, .btn-start:active, .btn-teacher:active { transform: translateY(3px); box-shadow: 0 3px 0 #b24200; }
+        .btn-submit:disabled { background: #ccc; box-shadow: none; transform: none; cursor: not-allowed; }
+        .result-box { background: #e6f7e6; border-radius: 40px; padding: 20px; text-align: center; border: 2px solid #8bc34a; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px; font-size: 1.3rem; font-weight: bold; margin-top: 20px; }
+        .correct { background: #2e7d32; color: white; padding: 8px 18px; border-radius: 60px; }
+        .wrong { background: #d32f2f; color: white; padding: 8px 18px; border-radius: 60px; }
+        .score-text { background: #ffb74d; padding: 8px 18px; border-radius: 60px; color: #3e2723; }
+        .welcome-box, .info-box, .teacher-box { text-align: center; padding: 20px; }
+        .welcome-box p { font-size: 1.3rem; margin: 20px 0; color: #2c3e66; line-height: 2rem; }
+        .emoji-big { font-size: 4rem; margin-bottom: 20px; }
+        footer { text-align: center; margin-top: 25px; color: #5d4037; }
+        .input-group { margin: 20px 0; text-align: right; }
+        .input-group label { display: block; font-size: 1.2rem; font-weight: bold; color: #2c3e66; margin-bottom: 8px; }
+        .input-group input { width: 100%; padding: 12px; font-size: 1.1rem; border: 2px solid #ffd9a5; border-radius: 30px; outline: none; font-family: 'Vazir'; text-align: center; }
+        .input-group input:focus { border-color: #ff8c42; }
+        .error { color: #d32f2f; font-size: 0.9rem; margin-top: 5px; display: none; }
+        .user-bar { background: #ffefcf; padding: 10px 20px; border-radius: 40px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .student-list { max-height: 400px; overflow-y: auto; margin: 20px 0; }
+        .student-item { background: #f8f9fa; border-radius: 20px; padding: 12px 18px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border-right: 5px solid #ff8c42; }
+        .student-name { font-weight: bold; color: #2c3e66; }
+        .student-score { background: #ff8c42; color: white; padding: 5px 15px; border-radius: 30px; font-weight: bold; }
+        .empty-list { text-align: center; color: #999; padding: 40px; }
+        .back-btn { background: #6c757d; box-shadow: 0 6px 0 #495057; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="container" id="mainContainer">
+    <!-- صفحه اصلی -->
+    <div id="homeSection">
+        <div class="emoji-big">📚🧸</div>
+        <h1>آزمون ریاضی ششم</h1>
+        <div class="sub">پایه دبستان</div>
+        <button class="btn-start" id="studentEntryBtn">🧑‍🎓 ورود دانش‌آموز</button>
+        <button class="btn-teacher" id="teacherEntryBtn">👨‍🏫 ورود معلم</button>
+    </div>
+
+    <!-- ثبت نام دانش‌آموز -->
+    <div id="infoSection" style="display: none;">
+        <div class="info-box">
+            <div class="emoji-big">📝🧑‍🎓</div>
+            <h1>ثبت نام در آزمون</h1>
+            <div class="sub">لطفاً مشخصات خود را وارد کن</div>
+            <div class="input-group">
+                <label>👤 نام و نام خانوادگی:</label>
+                <input type="text" id="fullName" placeholder="مثال: محمد رضایی" maxlength="50">
+                <div class="error" id="nameError">لطفاً نام خود را وارد کنید</div>
+            </div>
+            <div class="input-group">
+                <label>🆔 کد ملی (۱۰ رقم):</label>
+                <input type="text" id="nationalCode" placeholder="مثال: ۱۲۳۴۵۶۷۸۹۰" maxlength="10" inputmode="numeric">
+                <div class="error" id="codeError">کد ملی باید ۱۰ رقم باشد</div>
+            </div>
+            <button class="btn-start" id="saveInfoBtn">✅ ثبت اطلاعات و ورود به آزمون</button>
+            <button class="back-btn btn-start" id="backHomeFromInfo" style="background:#6c757d;">🔙 بازگشت</button>
+        </div>
+    </div>
+
+    <!-- خوش‌آمدگویی -->
+    <div id="welcomeSection" style="display: none;">
+        <div class="welcome-box">
+            <div class="emoji-big">🧸📚✨</div>
+            <h1>سلام <span id="displayName">کاربر عزیز</span>!</h1>
+            <div class="sub">به آزمون ریاضی پایه ششم خوش آمدی</div>
+            <p>🌟 این آزمون شامل ۵ سوال چهارگزینه‌ای است.<br>📌 هر سوال ۱ نمره دارد.<br>🎯 بعد از ثبت پاسخ، دیگر نمی‌توانی جواب‌ها را تغییر دهی.<br>😊 با دقت و آرامش پاسخ‌ها را انتخاب کن.</p>
+            <button class="btn-start" id="startExamBtn">🚀 شروع آزمون 🚀</button>
+            <button class="back-btn btn-start" id="backHomeFromWelcome" style="background:#6c757d;">🔙 بازگشت</button>
+        </div>
+    </div>
+
+    <!-- آزمون -->
+    <div id="examSection" style="display: none;">
+        <div class="user-bar" id="userBar">
+            <span>👤 <span id="examUserName">کاربر</span></span>
+            <span>🆔 <span id="examUserCode">••••</span></span>
+        </div>
+        <h1>🧮 آزمون ریاضی ششم 🧸</h1>
+        <div style="text-align: center;"><div class="sub">✨ هر سوال ۱ نمره دارد ✨</div></div>
+        <div id="questions-container"></div>
+        <button class="btn-submit" id="submitBtn">📋 ثبت پاسخ‌ها و مشاهده نتیجه (فقط یک بار)</button>
+        <div id="resultArea" class="result-box" style="display: none;"></div>
+        <button class="back-btn btn-start" id="backHomeFromExam" style="background:#6c757d; margin-top:10px;">🔙 بازگشت به صفحه اصلی</button>
+        <footer>🌟 سوالات را با دقت بخوان 🌟</footer>
+    </div>
+
+    <!-- پنل معلم -->
+    <div id="teacherPanel" style="display: none;">
+        <div class="teacher-box">
+            <div class="emoji-big">👨‍🏫📊</div>
+            <h1>پنل معلم</h1>
+            <div class="sub">مشاهده و ثبت نمرات دانش‌آموزان</div>
+            <div class="input-group" id="teacherLoginSection">
+                <label>🔐 کد ملی معلم:</label>
+                <input type="password" id="teacherCode" placeholder="کد ملی معلم را وارد کنید" maxlength="10" inputmode="numeric">
+                <div class="error" id="teacherError">کد ملی معلم صحیح نیست</div>
+                <button class="btn-teacher" id="loginTeacherBtn">ورود به پنل</button>
+            </div>
+            <div id="teacherDataSection" style="display: none;">
+                <div class="student-list" id="studentListContainer"></div>
+                <button class="back-btn btn-start" id="logoutTeacherBtn" style="background:#6c757d;">خروج از پنل معلم</button>
+            </div>
+            <button class="back-btn btn-start" id="backHomeFromTeacher" style="background:#6c757d; margin-top:10px;">🔙 بازگشت به صفحه اصلی</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const questions = [
+    { text: "حاصل ۱۲ × ۸ چند است؟", options: ["۸۴", "۹۶", "۱۰۸", "۱۱۲"], correct: 1 },
+    { text: "کسر ۳/۴ معادل کدام عدد اعشاری است؟", options: ["۰٫۲۵", "۰٫۵", "۰٫۷۵", "۱٫۲۵"], correct: 2 },
+    { text: "مساحت مستطیل به طول ۷ و عرض ۴ سانتی‌متر چقدر است؟", options: ["۱۸ سانتی‌متر مربع", "۲۲ سانتی‌متر مربع", "۲۸ سانتی‌متر مربع", "۳۲ سانتی‌متر مربع"], correct: 2 },
+    { text: "حاصل ۲۵% از ۲۰۰ کدام است؟", options: ["۲۵", "۵۰", "۷۵", "۱۰۰"], correct: 1 },
+    { text: "کدام عدد از همه بزرگ‌تر است؟", options: ["۰٫۴", "۳۵%", "۰٫۳۵", "۰٫۵"], correct: 3 }
+];
+
+const TEACHER_CODE = "1234567890";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw6Sa8fpnqU0XCVgaNFhYaO_1aWsLzcJ1I3OV-4Gimd-VdJpDQ1BkX9yTbBXWpK4w/exec";
+
+let examSubmitted = false;
+let userInfo = null;
+
+async function saveScoreToSheet(name, code, score, total) {
+    try {
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: name, code: code, score: score, total: total })
+        });
+        console.log("نمره با موفقیت ذخیره شد");
+    } catch(e) {
+        console.log("خطا در ذخیره نمره:", e);
+    }
+}
+
+function getScores() {
+    const scores = localStorage.getItem('mathExamScores');
+    return scores ? JSON.parse(scores) : [];
+}
+
+function saveScores(scores) {
+    localStorage.setItem('mathExamScores', JSON.stringify(scores));
+}
+
+function addScore(studentName, studentCode, score, total) {
+    let scores = getScores();
+    scores.push({ name: studentName, code: studentCode, score: score, total: total, date: new Date().toLocaleString('fa-IR') });
+    saveScores(scores);
+}
+
+function renderQuestions() {
+    const container = document.getElementById('questions-container');
+    if(!container) return;
+    container.innerHTML = '';
+    questions.forEach((q, idx) => {
+        let html = `<div class="question-card"><div class="question-text"><span style="background:#ffaa44;padding:4px 12px;border-radius:50px;display:inline-block;margin-left:12px;">${idx+1}</span> ${q.text}</div><div class="options">`;
+        q.options.forEach((opt, optIdx) => {
+            html += `<div class="option"><input type="radio" name="q${idx}" value="${optIdx}" id="q${idx}_${optIdx}"><label for="q${idx}_${optIdx}">${opt}</label></div>`;
+        });
+        html += `</div></div>`;
+        container.innerHTML += html;
+    });
+    document.querySelectorAll('.option').forEach(div => {
+        div.addEventListener('click', function() { if(examSubmitted) return; let r = this.querySelector('input'); if(r) r.checked = true; });
+    });
+}
+
+function disableAllOptions() {
+    document.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = true);
+    document.querySelectorAll('.option').forEach(opt => { opt.style.opacity = '0.6'; opt.style.pointerEvents = 'none'; });
+}
+
+async function showResult() {
+    if(examSubmitted) return;
+    let correct = 0;
+    for(let i=0; i<questions.length; i++) {
+        let selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if(selected && parseInt(selected.value) === questions[i].correct) correct++;
+    }
+    let wrong = questions.length - correct;
+    document.getElementById('resultArea').style.display = 'flex';
+    document.getElementById('resultArea').innerHTML = `<div class="correct">✅ درست: ${correct}</div><div class="wrong">❌ غلط: ${wrong}</div><div class="score-text">🎯 نمره: ${correct} از ${questions.length}</div>`;
+    document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
+    
+    if(userInfo) {
+        addScore(userInfo.name, userInfo.code, correct, questions.length);
+        await saveScoreToSheet(userInfo.name, userInfo.code, correct, questions.length);
+    }
+    document.getElementById('submitBtn').disabled = true;
+    document.getElementById('submitBtn').style.opacity = '0.6';
+    disableAllOptions();
+    examSubmitted = true;
+}
+
+function startExam() {
+    if(userInfo) {
+        document.getElementById('examUserName').innerText = userInfo.name;
+        document.getElementById('examUserCode').innerText = '••••••' + userInfo.code.slice(-4);
+    }
+    document.getElementById('welcomeSection').style.display = 'none';
+    document.getElementById('examSection').style.display = 'block';
+    renderQuestions();
+    examSubmitted = false;
+    document.getElementById('submitBtn').disabled = false;
+    document.getElementById('submitBtn').style.opacity = '1';
+    document.getElementById('resultArea').style.display = 'none';
+}
+
+function saveUserInfo() {
+    const fullName = document.getElementById('fullName').value.trim();
+    const nationalCode = document.getElementById('nationalCode').value.trim();
+    let isValid = true;
+    if (fullName === "") { document.getElementById('nameError').style.display = 'block'; isValid = false; }
+    else { document.getElementById('nameError').style.display = 'none'; }
+    if (!/^\d{10}$/.test(nationalCode)) { document.getElementById('codeError').style.display = 'block'; isValid = false; }
+    else { document.getElementById('codeError').style.display = 'none'; }
+    if (!isValid) return;
+    userInfo = { name: fullName, code: nationalCode };
+    document.getElementById('displayName').innerText = fullName;
+    document.getElementById('infoSection').style.display = 'none';
+    document.getElementById('welcomeSection').style.display = 'block';
+}
+
+function showTeacherPanel() {
+    document.getElementById('homeSection').style.display = 'none';
+    document.getElementById('teacherPanel').style.display = 'block';
+    document.getElementById('teacherLoginSection').style.display = 'block';
+    document.getElementById('teacherDataSection').style.display = 'none';
+}
+
+function loginTeacher() {
+    if (document.getElementById('teacherCode').value.trim() === TEACHER_CODE) {
+        document.getElementById('teacherLoginSection').style.display = 'none';
+        document.getElementById('teacherDataSection').style.display = 'block';
+        const scores = getScores();
+        const container = document.getElementById('studentListContainer');
+        if (scores.length === 0) container.innerHTML = '<div class="empty-list">📭 هنوز هیچ دانش‌آموزی آزمون نداده است</div>';
+        else {
+            container.innerHTML = '<div style="margin-bottom:15px; font-weight:bold; text-align:center;">📋 لیست نمرات دانش‌آموزان</div>';
+            [...scores].reverse().forEach(item => { container.innerHTML += `<div class="student-item"><div><div class="student-name">${item.name}</div><div style="font-size:0.8rem; color:#888;">کد: ${item.code} | ${item.date}</div></div><div class="student-score">${item.score} از ${item.total}</div></div>`; });
+        }
+    } else { document.getElementById('teacherError').style.display = 'block'; }
+}
+
+function logoutTeacher() {
+    document.getElementById('teacherLoginSection').style.display = 'block';
+    document.getElementById('teacherDataSection').style.display = 'none';
+    document.getElementById('teacherCode').value = '';
+}
+
+function showHome() {
+    document.getElementById('homeSection').style.display = 'block';
+    document.getElementById('infoSection').style.display = 'none';
+    document.getElementById('welcomeSection').style.display = 'none';
+    document.getElementById('examSection').style.display = 'none';
+    document.getElementById('teacherPanel').style.display = 'none';
+    userInfo = null;
+    examSubmitted = false;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('studentEntryBtn').addEventListener('click', () => { document.getElementById('homeSection').style.display = 'none'; document.getElementById('infoSection').style.display = 'block'; });
+    document.getElementById('teacherEntryBtn').addEventListener('click', showTeacherPanel);
+    document.getElementById('saveInfoBtn').addEventListener('click', saveUserInfo);
+    document.getElementById('startExamBtn').addEventListener('click', startExam);
+    document.getElementById('submitBtn').addEventListener('click', showResult);
+    document.getElementById('loginTeacherBtn').addEventListener('click', loginTeacher);
+    document.getElementById('logoutTeacherBtn').addEventListener('click', logoutTeacher);
+    document.getElementById('backHomeFromInfo').addEventListener('click', showHome);
+    document.getElementById('backHomeFromWelcome').addEventListener('click', showHome);
+    document.getElementById('backHomeFromExam').addEventListener('click', showHome);
+    document.getElementById('backHomeFromTeacher').addEventListener('click', showHome);
+    document.getElementById('nationalCode').addEventListener('input', function(e) { this.value = this.value.replace(/[^0-9]/g, ''); });
+    document.getElementById('teacherCode').addEventListener('input', function(e) { this.value = this.value.replace(/[^0-9]/g, ''); });
+    showHome();
+});
+</script>
+</body>
+</html>
