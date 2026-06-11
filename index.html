@@ -2,7 +2,7 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>آزمون ریاضی ششم - با تایمر</title>
+    <title>آزمون ریاضی ششم - تایمر دار</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Vazir', sans-serif; }
@@ -34,7 +34,6 @@
         .back-btn { background: #6c757d; margin-top: 10px; }
         .student-list { max-height: 400px; overflow-y: auto; margin: 15px 0; }
         .emoji-big { font-size: 3rem; }
-        .disabled-option { opacity: 0.6; pointer-events: none; }
     </style>
 </head>
 <body>
@@ -98,7 +97,7 @@ const questions = [
 let currentStudent = null;
 let timerInterval = null;
 let timeLeft = 60;
-let examSubmittedFlag = false;
+let examActive = false;
 
 function getScores() { return JSON.parse(localStorage.getItem('math_scores') || '[]'); }
 function saveScores(s) { localStorage.setItem('math_scores', JSON.stringify(s)); }
@@ -115,7 +114,8 @@ function showHome() {
     document.getElementById('welcomeSection').style.display = 'none';
     document.getElementById('examSection').style.display = 'none';
     document.getElementById('teacherSection').style.display = 'none';
-    if(timerInterval) clearInterval(timerInterval);
+    if(timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+    examActive = false;
 }
 
 function renderQuestions() {
@@ -130,7 +130,7 @@ function renderQuestions() {
         container.innerHTML += html;
     });
     document.querySelectorAll('.option').forEach(div => {
-        div.onclick = () => { if(div.querySelector('input') && !examSubmittedFlag) div.querySelector('input').checked = true; };
+        div.onclick = () => { if(div.querySelector('input') && examActive) div.querySelector('input').checked = true; };
     });
 }
 
@@ -139,9 +139,10 @@ function disableOptions() {
     document.querySelectorAll('.option').forEach(o => { o.style.opacity = '0.6'; o.style.pointerEvents = 'none'; });
 }
 
-function submitExam() {
-    if(examSubmittedFlag) return;
-    if(timerInterval) clearInterval(timerInterval);
+function finishExam() {
+    if(!examActive) return;
+    if(timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+    examActive = false;
     
     let correct = 0;
     for(let i=0; i<5; i++) {
@@ -152,16 +153,17 @@ function submitExam() {
     document.getElementById('result').innerHTML = `<div class="correct">✅ درست: ${correct}</div><div class="wrong">❌ غلط: ${5-correct}</div><div class="score-text">🎯 نمره: ${correct} از ۵</div>`;
     if(currentStudent) addScore(currentStudent.name, currentStudent.code, correct);
     disableOptions();
-    examSubmittedFlag = true;
+    document.getElementById('submitExam').disabled = true;
 }
 
 function startTimer() {
     timerInterval = setInterval(() => {
         if(timeLeft <= 0) {
             clearInterval(timerInterval);
+            timerInterval = null;
             document.getElementById('timerDisplay').innerHTML = "⏱️ ۰:۰۰";
             document.getElementById('timerDisplay').classList.add('timer-warning');
-            submitExam();
+            finishExam();
         } else {
             timeLeft--;
             let minutes = Math.floor(timeLeft / 60);
@@ -176,12 +178,13 @@ function startExam() {
     document.getElementById('welcomeSection').style.display = 'none';
     document.getElementById('examSection').style.display = 'block';
     renderQuestions();
-    examSubmittedFlag = false;
+    examActive = true;
     timeLeft = 60;
     document.getElementById('timerDisplay').innerHTML = "⏱️ ۱:۰۰";
     document.getElementById('timerDisplay').classList.remove('timer-warning');
     document.getElementById('result').style.display = 'none';
     document.getElementById('submitExam').disabled = false;
+    if(timerInterval) clearInterval(timerInterval);
     startTimer();
 }
 
@@ -204,7 +207,7 @@ document.getElementById('saveStudentBtn').onclick = () => {
     document.getElementById('welcomeSection').style.display = 'block';
 };
 document.getElementById('startExamBtn').onclick = startExam;
-document.getElementById('submitExam').onclick = submitExam;
+document.getElementById('submitExam').onclick = finishExam;
 document.getElementById('teacherLoginBtn').onclick = () => {
     if(document.getElementById('teacherCodeInput').value === "1234567890") {
         document.getElementById('teacherData').style.display = 'block';
