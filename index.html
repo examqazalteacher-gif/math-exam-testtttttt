@@ -2,45 +2,257 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>آزمون ریاضی ششم</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Vazir', sans-serif; }
-        body { background: linear-gradient(135deg, #4facfe, #00f2fe); min-height: 100vh; padding: 20px; }
-        .container { max-width: 800px; width: 100%; margin: 0 auto; background: rgba(255,255,255,0.95); border-radius: 32px; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center; }
-        h1 { color: #ff8c00; font-size: 1.8rem; margin-bottom: 10px; }
-        .sub { color: #2c3e66; margin-bottom: 20px; border-bottom: 2px dashed #ffb347; display: inline-block; padding-bottom: 6px; font-size: 0.9rem; }
-        .timer-box { background: #2c3e66; color: white; font-size: 1.8rem; font-weight: bold; padding: 8px 16px; border-radius: 50px; display: inline-block; margin-bottom: 20px; }
-        .timer-warning { background: #d32f2f; animation: blink 0.5s infinite; }
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-        .question-card { background: #fff7ed; border-radius: 24px; padding: 15px; margin-bottom: 20px; text-align: right; }
-        .question-text { font-size: 1.1rem; font-weight: bold; background: #ffefcf; padding: 10px 15px; border-radius: 20px; margin-bottom: 12px; }
-        .options { display: flex; flex-direction: column; gap: 8px; }
-        .option { display: flex; align-items: center; gap: 10px; background: white; padding: 8px 12px; border-radius: 50px; border: 1px solid #ffd9a5; cursor: pointer; }
-        input[type="radio"] { width: 18px; height: 18px; accent-color: #ff8c42; cursor: pointer; }
-        label { font-size: 0.95rem; cursor: pointer; width: 100%; }
-        .btn-submit, .btn-start, .btn-teacher { display: block; width: 100%; background: linear-gradient(95deg, #ff9a3c, #ff6a00); border: none; padding: 12px; border-radius: 50px; font-size: 1.2rem; font-weight: bold; color: white; cursor: pointer; margin: 12px 0; }
-        .btn-teacher { background: linear-gradient(95deg, #6a11cb, #2575fc); }
-        .result-box { background: #e6f7e6; border-radius: 30px; padding: 12px; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
-        .correct { background: #2e7d32; color: white; padding: 5px 12px; border-radius: 50px; font-size: 0.9rem; }
-        .wrong { background: #d32f2f; color: white; padding: 5px 12px; border-radius: 50px; font-size: 0.9rem; }
-        .score-text { background: #ffb74d; padding: 5px 12px; border-radius: 50px; color: #3e2723; font-size: 0.9rem; }
-        .input-group { margin: 12px 0; text-align: right; }
-        .input-group input { width: 100%; padding: 10px; font-size: 1rem; border: 2px solid #ffd9a5; border-radius: 30px; text-align: center; }
-        .error { color: #d32f2f; font-size: 0.75rem; display: none; margin-top: 5px; }
-        .back-btn { background: #6c757d; margin-top: 10px; }
-        .emoji-big { font-size: 2.5rem; }
-        .disabled-btn { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
-        .message-box { background: #ffecb3; padding: 15px; border-radius: 20px; margin: 15px 0; color: #e65100; font-weight: bold; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazir', sans-serif;
+        }
         
+        body {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            min-height: 100vh;
+            padding: 16px;
+        }
+        
+        .container {
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.95);
+            border-radius: 32px;
+            padding: 20px 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+        
+        h1 {
+            color: #ff8c00;
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+        }
+        
+        .sub {
+            color: #2c3e66;
+            margin-bottom: 20px;
+            border-bottom: 2px dashed #ffb347;
+            display: inline-block;
+            padding-bottom: 5px;
+            font-size: 0.85rem;
+        }
+        
+        .timer-box {
+            background: #2c3e66;
+            color: white;
+            font-size: 1.6rem;
+            font-weight: bold;
+            padding: 6px 16px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+        
+        .timer-warning {
+            background: #d32f2f;
+            animation: blink 0.5s infinite;
+        }
+        
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .question-card {
+            background: #fff7ed;
+            border-radius: 20px;
+            padding: 12px;
+            margin-bottom: 16px;
+            text-align: right;
+        }
+        
+        .question-text {
+            font-size: 1rem;
+            font-weight: bold;
+            background: #ffefcf;
+            padding: 8px 12px;
+            border-radius: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 6px 12px;
+            border-radius: 40px;
+            border: 1px solid #ffd9a5;
+            cursor: pointer;
+        }
+        
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #ff8c42;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        
+        label {
+            font-size: 0.9rem;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .btn-submit, .btn-start, .btn-teacher {
+            display: block;
+            width: 100%;
+            background: linear-gradient(95deg, #ff9a3c, #ff6a00);
+            border: none;
+            padding: 12px;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            margin: 10px 0;
+            text-align: center;
+        }
+        
+        .btn-teacher {
+            background: linear-gradient(95deg, #6a11cb, #2575fc);
+        }
+        
+        .result-box {
+            background: #e6f7e6;
+            border-radius: 24px;
+            padding: 12px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+        }
+        
+        .correct {
+            background: #2e7d32;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+        }
+        
+        .wrong {
+            background: #d32f2f;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+        }
+        
+        .score-text {
+            background: #ffb74d;
+            padding: 4px 12px;
+            border-radius: 40px;
+            color: #3e2723;
+            font-size: 0.9rem;
+        }
+        
+        .input-group {
+            margin: 12px 0;
+            text-align: right;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 2px solid #ffd9a5;
+            border-radius: 30px;
+            text-align: center;
+        }
+        
+        .error {
+            color: #d32f2f;
+            font-size: 0.7rem;
+            display: none;
+            margin-top: 5px;
+        }
+        
+        .back-btn {
+            background: #6c757d;
+            margin-top: 8px;
+        }
+        
+        .emoji-big {
+            font-size: 2.2rem;
+        }
+        
+        .student-item {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .student-score {
+            background: #ff8c42;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+        }
+        
+        .disabled-btn {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        /* موبایل */
         @media (max-width: 550px) {
-            .container { padding: 15px; }
-            h1 { font-size: 1.5rem; }
-            .question-text { font-size: 1rem; }
-            label { font-size: 0.85rem; }
-            .btn-submit, .btn-start, .btn-teacher { font-size: 1rem; padding: 10px; }
-            .timer-box { font-size: 1.5rem; padding: 6px 12px; }
+            body {
+                padding: 12px;
+            }
+            .container {
+                padding: 16px 12px;
+            }
+            h1 {
+                font-size: 1.3rem;
+            }
+            .question-text {
+                font-size: 0.9rem;
+                padding: 6px 10px;
+            }
+            label {
+                font-size: 0.8rem;
+            }
+            .btn-submit, .btn-start, .btn-teacher {
+                font-size: 1rem;
+                padding: 10px;
+            }
+            .timer-box {
+                font-size: 1.3rem;
+                padding: 5px 12px;
+            }
+            .option {
+                padding: 5px 10px;
+            }
         }
     </style>
 </head>
@@ -58,7 +270,7 @@
         <div class="emoji-big">📝🧑‍🎓</div>
         <h1>ثبت نام</h1>
         <div class="input-group"><label>نام:</label><input type="text" id="name"><div class="error" id="nameErr">نام را وارد کن</div></div>
-        <div class="input-group"><label>کد ملی (۱۰ رقم):</label><input type="text" id="code" maxlength="10"><div class="error" id="codeErr">کد ملی ۱۰ رقمی نیست</div></div>
+        <div class="input-group"><label>کد ملی (۱۰ رقم):</label><input type="text" id="code" maxlength="10" inputmode="numeric"><div class="error" id="codeErr">کد ملی ۱۰ رقمی نیست</div></div>
         <button class="btn-start" id="saveStudentBtn">ثبت و شروع</button>
         <button class="back-btn btn-start" id="backHome1">بازگشت</button>
     </div>
@@ -83,7 +295,7 @@
     <div id="teacherSection" style="display:none;">
         <div class="emoji-big">👨‍🏫</div>
         <h1>پنل معلم</h1>
-        <div class="input-group"><label>کد معلم:</label><input type="password" id="teacherCodeInput"><div class="error" id="teacherErr">کد اشتباه</div><button class="btn-teacher" id="teacherLoginBtn">ورود</button></div>
+        <div class="input-group"><label>کد معلم:</label><input type="password" id="teacherCodeInput" inputmode="numeric"><div class="error" id="teacherErr">کد اشتباه</div><button class="btn-teacher" id="teacherLoginBtn">ورود</button></div>
         <div id="teacherData" style="display:none;">
             <div id="scoreList"></div>
             <button class="btn-submit" id="excelBtn" style="background:#11998e;">📎 خروجی Excel</button>
@@ -106,21 +318,32 @@ let currentStudent = null;
 let timerInterval = null;
 let timeLeft = 60;
 let examActive = false;
+let examFinished = false; // مهم: برای جلوگیری از ثبت مجدد بعد از اتمام
 
-// ========== ذخیره و بازیابی نمرات و وضعیت ==========
+// ========== ذخیره و بازیابی ==========
 function getScores() { return JSON.parse(localStorage.getItem('math_scores') || '[]'); }
 function saveScores(s) { localStorage.setItem('math_scores', JSON.stringify(s)); }
+
+// لیست کدهای ملی قبلاً ثبت‌شده
+function getTakenCodes() { return JSON.parse(localStorage.getItem('taken_codes') || '[]'); }
+function saveTakenCodes(codes) { localStorage.setItem('taken_codes', JSON.stringify(codes)); }
 
 function addScore(name, code, score) {
     let scores = getScores();
     scores.push({ name, code, score, total:5, date: new Date().toLocaleString('fa-IR') });
     saveScores(scores);
+    
+    // ثبت کد ملی به عنوان قبلاً شرکت‌کننده
+    let taken = getTakenCodes();
+    if(!taken.includes(code)) {
+        taken.push(code);
+        saveTakenCodes(taken);
+    }
 }
 
-// بررسی اینکه آیا یک کد ملی قبلاً آزمون داده یا نه
 function hasTakenExam(code) {
-    let scores = getScores();
-    return scores.some(s => s.code === code);
+    let taken = getTakenCodes();
+    return taken.includes(code);
 }
 
 // ========== توابع اصلی ==========
@@ -132,6 +355,7 @@ function showHome() {
     document.getElementById('teacherSection').style.display = 'none';
     if(timerInterval) { clearInterval(timerInterval); timerInterval = null; }
     examActive = false;
+    examFinished = false;
 }
 
 function renderQuestions() {
@@ -146,7 +370,7 @@ function renderQuestions() {
         container.innerHTML += html;
     });
     document.querySelectorAll('.option').forEach(div => {
-        div.onclick = () => { if(div.querySelector('input') && examActive) div.querySelector('input').checked = true; };
+        div.onclick = () => { if(div.querySelector('input') && examActive && !examFinished) div.querySelector('input').checked = true; };
     });
 }
 
@@ -156,9 +380,10 @@ function disableOptions() {
 }
 
 function finishExam() {
-    if(!examActive) return;
+    if(!examActive || examFinished) return;
     if(timerInterval) { clearInterval(timerInterval); timerInterval = null; }
     examActive = false;
+    examFinished = true;
     
     let correct = 0;
     for(let i=0; i<5; i++) {
@@ -173,6 +398,10 @@ function finishExam() {
     }
     disableOptions();
     document.getElementById('submitExam').disabled = true;
+    
+    // غیرفعال کردن دکمه شروع (برای جلوگیری از شروع مجدد)
+    let startBtn = document.getElementById('startExamBtn');
+    if(startBtn) startBtn.style.display = 'none';
 }
 
 function startTimer() {
@@ -194,6 +423,10 @@ function startTimer() {
 }
 
 function startExam() {
+    if(examFinished) {
+        alert("شما قبلاً در این آزمون شرکت کرده‌اید!");
+        return;
+    }
     document.getElementById('welcomeSection').style.display = 'none';
     document.getElementById('examSection').style.display = 'block';
     renderQuestions();
@@ -229,7 +462,6 @@ document.getElementById('saveStudentBtn').onclick = () => {
     if(!name) { document.getElementById('nameErr').style.display='block'; return; }
     if(!/^\d{10}$/.test(code)) { document.getElementById('codeErr').style.display='block'; return; }
     
-    // بررسی اینکه آیا قبلاً با این کد ملی آزمون داده شده
     if(hasTakenExam(code)) {
         alert("⚠️ این کد ملی قبلاً در آزمون شرکت کرده است!\nشما فقط یک بار می‌توانید در آزمون شرکت کنید.");
         return;
@@ -239,6 +471,9 @@ document.getElementById('saveStudentBtn').onclick = () => {
     document.getElementById('studentName').innerText = name;
     document.getElementById('studentSection').style.display = 'none';
     document.getElementById('welcomeSection').style.display = 'block';
+    examFinished = false;
+    let startBtn = document.getElementById('startExamBtn');
+    if(startBtn) startBtn.style.display = 'block';
 };
 
 document.getElementById('startExamBtn').onclick = startExam;
@@ -254,7 +489,7 @@ document.getElementById('teacherLoginBtn').onclick = () => {
         else {
             container.innerHTML = '<div style="margin-bottom:10px; font-weight:bold;">📋 لیست نمرات دانش‌آموزان</div>';
             scores.slice().reverse().forEach(s => {
-                container.innerHTML += `<div style="background:#f8f9fa; border-radius:20px; padding:10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;"><div><b>${s.name}</b><br><small style="color:#888;">کد: ${s.code} | ${s.date}</small></div><div style="background:#ff8c42; color:white; padding:4px 12px; border-radius:30px;">${s.score} از ${s.total}</div></div>`;
+                container.innerHTML += `<div class="student-item"><div><b>${s.name}</b><br><small style="color:#888;">کد: ${s.code} | ${s.date}</small></div><div class="student-score">${s.score} از ${s.total}</div></div>`;
             });
         }
     } else { document.getElementById('teacherErr').style.display = 'block'; }
@@ -274,6 +509,7 @@ document.getElementById('excelBtn').onclick = () => {
 document.getElementById('clearBtn').onclick = () => {
     if(confirm("⚠️ آیا از پاک کردن همه نمرات مطمئنی؟ این کار قابل بازگشت نیست!")) {
         localStorage.removeItem('math_scores');
+        localStorage.removeItem('taken_codes');
         document.getElementById('scoreList').innerHTML = '<div style="padding:20px;">📭 نمره‌ای ثبت نشده</div>';
     }
 };
